@@ -119,7 +119,7 @@ public class Banco {
 	public List<?> listarObjetos(Class<?> classe, String ordanacao){
 		try{
 			sessao = HibernateUtil.getSession().openSession();
-			Criteria criteria = sessao.createCriteria(classe).addOrder(Order.asc(ordanacao));
+			Criteria criteria = sessao.createCriteria(classe).addOrder(Order.desc(ordanacao));
 			
 			
 			

@@ -73,7 +73,7 @@ public class JPrincipal extends JFrame implements ActionListener {
 	public JPrincipal() {
 		setTitle("Ordena\u00E7\u00E3o de Provas e Ocorrencia de Palavras");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 722, 456);
+		setBounds(0, 0, 722, 700);
 
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setFont(new Font("Segoe UI", Font.PLAIN, 16));
@@ -112,13 +112,16 @@ public class JPrincipal extends JFrame implements ActionListener {
 		
 		mntmExcluirOcorrencia = new JMenuItem("Excluir 1 Ocorrencia");
 		mnExtra.add(mntmExcluirOcorrencia);
+		
+		JMenuItem mntmOutro = new JMenuItem("Outro");
+		mnExtra.add(mntmOutro);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 124, 686, 262);
+		scrollPane.setBounds(10, 124, 686, 460);
 		contentPane.add(scrollPane);
 
 		textArea = new JTextArea();
@@ -257,7 +260,8 @@ public class JPrincipal extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(null, "Não implementado ainda");
 			break;
 		case "Relatorio Palavras":
-			JOptionPane.showMessageDialog(null, "Não implementado ainda");
+			JListaPalavra frame = new JListaPalavra();
+			frame.setVisible(true);
 			break;
 		case "Cancelar":
 			textArea.setText("");
@@ -295,8 +299,9 @@ public class JPrincipal extends JFrame implements ActionListener {
 			palavraBanco.setNome(palavraBanco.getNome().replace(";", "").replace(".", "")
 					.replace(",", "").replace("_", "").replace("(", "").replace(")", "").replace(" ", ""));
 			palavraBanco.setMateria("DIREITO PREVIDENCIARIO");
+			palavraBanco.setOcorrencia(palavraBanco.getOcorrencia()+1);
 			banco.salvarOuAtualizarObjeto(palavraBanco);
-			if (palavraBanco.getOcorrencia()<=1 || palavraBanco.getNome().equals("")) {
+			if (palavraBanco.getQuantProvas()<=2 || palavraBanco.getNome().equals("")) {
 				
 				//JOptionPane.showMessageDialog(null, "palavra igual: "+palavra.getNome());
 
