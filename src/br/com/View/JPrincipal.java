@@ -101,7 +101,7 @@ public class JPrincipal extends JFrame implements ActionListener {
 		JMenu mnRelatorio = new JMenu("Relatorio");
 		menuBar.add(mnRelatorio);
 
-		JMenuItem mntmRelatorioProvas = new JMenuItem("Relatorio Provas");
+		JMenuItem mntmRelatorioProvas = new JMenuItem("Relatorio Lei");
 		mnRelatorio.add(mntmRelatorioProvas);
 
 		JMenuItem mntmRelatorioPalavras = new JMenuItem("Relatorio Palavras");
@@ -112,6 +112,9 @@ public class JPrincipal extends JFrame implements ActionListener {
 		
 		mntmExcluirOcorrencia = new JMenuItem("Excluir 1 Ocorrencia");
 		mnExtra.add(mntmExcluirOcorrencia);
+		
+		JMenuItem mntmAdicionarLei = new JMenuItem("Adicionar Lei");
+		mnExtra.add(mntmAdicionarLei);
 		
 		JMenuItem mntmOutro = new JMenuItem("Outro");
 		mnExtra.add(mntmOutro);
@@ -195,11 +198,12 @@ public class JPrincipal extends JFrame implements ActionListener {
 		mntmCriaBanca.addActionListener(this);
 		mntmCriaInstituio.addActionListener(this);
 		mntmExcluirOcorrencia.addActionListener(this);
+		mntmAdicionarLei.addActionListener(this);
 	}
 
 	private String[] listaInstituicao() {
 		@SuppressWarnings("unchecked")
-		List<Object> listaObj = (List<Object>) banco.listarObjetos(
+		List<Object> listaObj = (List<Object>) banco.listarObjetosAsc(
 				Instituicao.class, "nome");
 		String[] lista = new String[listaObj.size()];
 		for (int i = 0; i < listaObj.size(); i++) {
@@ -213,7 +217,7 @@ public class JPrincipal extends JFrame implements ActionListener {
 	private String[] listaMaterias() {
 
 		@SuppressWarnings("unchecked")
-		List<Object> listaObj = (List<Object>) banco.listarObjetos(
+		List<Object> listaObj = (List<Object>) banco.listarObjetosAsc(
 				Materia.class, "nome");
 		String[] lista = new String[listaObj.size()];
 		for (int i = 0; i < listaObj.size(); i++) {
@@ -227,7 +231,7 @@ public class JPrincipal extends JFrame implements ActionListener {
 	private String[] listaBancas() {
 
 		@SuppressWarnings("unchecked")
-		List<Object> listaObj = (List<Object>) banco.listarObjetos(Banca.class,
+		List<Object> listaObj = (List<Object>) banco.listarObjetosAsc(Banca.class,
 				"nome");
 		String[] lista = new String[listaObj.size()];
 		for (int i = 0; i < listaObj.size(); i++) {
@@ -247,8 +251,9 @@ public class JPrincipal extends JFrame implements ActionListener {
 		// System.out.println(acao);
 
 		switch (acao) {
-		case "Salvar Arquivo":
-			JOptionPane.showMessageDialog(null, "Não implementado ainda");
+		case "Adicionar Lei":
+			JAdicionaLei lei = new JAdicionaLei();
+			lei.setVisible(true);
 			break;
 		case "Criar Classe":
 			criaClasse();
@@ -291,7 +296,7 @@ public class JPrincipal extends JFrame implements ActionListener {
 	private void excluirOcorrencia() {
 
 		@SuppressWarnings("unchecked")
-		ArrayList<Object> listaBanco = (ArrayList<Object>) banco.listarObjetos(
+		ArrayList<Object> listaBanco = (ArrayList<Object>) banco.listarObjetosAsc(
 				Palavra.class, "nome");
 
 		for (int i = 0; i < listaBanco.size(); i++) {
@@ -483,7 +488,7 @@ public class JPrincipal extends JFrame implements ActionListener {
 	public void salvaPalavra(Palavra palavra) {
 
 		@SuppressWarnings("unchecked")
-		ArrayList<Object> listaBanco = (ArrayList<Object>) banco.listarObjetos(
+		ArrayList<Object> listaBanco = (ArrayList<Object>) banco.listarObjetosAsc(
 				Palavra.class, "nome");
 
 		for (int i = 0; i < listaBanco.size(); i++) {
@@ -513,7 +518,7 @@ public class JPrincipal extends JFrame implements ActionListener {
 			String materia, String texto) {
 		Prova prov = new Prova();
 		@SuppressWarnings("unchecked")
-		List<Object> listaObj = (List<Object>) banco.listarObjetos(Prova.class,
+		List<Object> listaObj = (List<Object>) banco.listarObjetosAsc(Prova.class,
 				"id");
 		for (int i = 0; i < listaObj.size(); i++) {
 			Prova prova = (Prova) listaObj.get(i);

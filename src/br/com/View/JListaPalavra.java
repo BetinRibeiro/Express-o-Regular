@@ -2,6 +2,7 @@ package br.com.View;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -28,21 +29,21 @@ public class JListaPalavra extends JFrame {
 	private ModelPalavras model = new ModelPalavras();
 	private Banco banco = new Banco();
 
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					JListaPalavra frame = new JListaPalavra();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					JListaPalavra frame = new JListaPalavra();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
 	/**
 	 * Create the frame.
@@ -113,12 +114,152 @@ public class JListaPalavra extends JFrame {
 		btnSair.setBounds(208, 628, 89, 23);
 		contentPane.add(btnSair);
 		
+		JButton btnProcessarOcorrenciaNa = new JButton("Processar");
+		btnProcessarOcorrenciaNa.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				processar();
+			}
+
+			
+		});
+		btnProcessarOcorrenciaNa.setBounds(476, 628, 130, 23);
+		contentPane.add(btnProcessarOcorrenciaNa);
+		
+		JButton btnZerar = new JButton("Zerar ");
+		btnZerar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				zararOcorrencia();
+			}
+
+			private void zararOcorrencia() {
+				ArrayList<?> lista = (ArrayList<?>) banco.listarObjetosAsc(ArtigoLei.class, "id");
+				
+				for (int i = 0; i < lista.size(); i++) {
+					System.out.println("Entrou");
+					ArtigoLei artigo = (ArtigoLei) lista.get(i);
+					artigo.setPrioridade(0);
+					banco.salvarOuAtualizarObjeto(artigo);
+				}
+						
+				
+			}
+		});
+		btnZerar.setBounds(336, 628, 130, 23);
+		contentPane.add(btnZerar);
+		
 		atualizarTabela();
 	}
+	private void processar() {
+		
+		ArrayList<?> listaPalavras = (ArrayList<?>) banco.listarObjetosDesc(Palavra.class, "ocorrencia");
+		
+		ArrayList<?> listaArtigos = (ArrayList<?>) banco.listarObjetosDesc(ArtigoLei.class, "id");
+		
+
+		for (int i = 0; i < listaPalavras.size(); i++) {
+			
+			for (int j = 0; j < listaArtigos.size(); j++) {
+				
+				ArtigoLei artigo = (ArtigoLei) listaArtigos.get(j);
+				
+				ArrayList<Palavra> listaPalavraArtigo = listaOcorrencia(artigo.getConteudo());
+				
+				for (int k = 0; k < listaPalavraArtigo.size(); k++) {
+					Palavra palavraComparada = (Palavra) listaPalavras.get(i);
+					
+					Palavra palavraArtigo = listaPalavraArtigo.get(k);
+					
+					if (palavraComparada.getNome().equals(palavraArtigo.getNome())) {
+						float prioridade = palavraComparada.getOcorrencia()/palavraComparada.getQuantProvas();
+						artigo.setPrioridade(prioridade+artigo.getPrioridade());
+						banco.salvarOuAtualizarObjeto(artigo);
+						
+					}
+					
+				}
+				
+			}
+			
+		}
+	}
+	private ArrayList<Palavra> listaOcorrencia(String texto) {
+		// texto.replaceAll(".","").replaceAll(",","").replaceAll(";","");
+		// texto.replaceAll("\\(","").replaceAll("\\)","").replace("-","");
+
+		// cria uma lista para poder armazenar as palavras
+		ArrayList<Palavra> lista = new ArrayList<Palavra>();
+
+		// define um ponto incial
+		int a = 0;
+		// define um ponto posterior
+		int b = texto.indexOf(" ", a);
+
+		// aloca a palavra
+		String palavra = texto.substring(a, b).replace(";", "");
+
+		// modifica o proximo ponto de partida para a proxima palavra
+		a = b + 1;
+		// aloca o ponto apos ao proximo para coletar a proxima palavra
+		b = texto.indexOf(" ", a);
+
+		// instancia a palavra
+		Palavra pal = new Palavra();
+		// seta valores para as variais
+		pal.setId(0);
+		pal.setNome(palavra);
+		pal.setOcorrencia(1);
+
+		// adiciona a primeira palavra na lista
+		lista.add(pal);
+
+		//
+
+		// System.out.println(b);
+
+		while (b != -1) {
+
+			// coleta a proxima palavra
+			palavra = texto.substring(a, b).replace(";", "").replace(".", "")
+					.replace(",", "").replace("_", "").replace("(", "").replace(")", "").replace(":", "");
+			// modifica o ponto de partida
+			a = b + 1;
+			// modifica o ponto apos o da partida para poder pegar a proxima
+			// palavra
+			b = texto.indexOf(" ", a);
+
+			for (int i = 0; i < lista.size(); i++) {
+
+				// lista.get(0).getNome());
+
+				if (palavra.equalsIgnoreCase(lista.get(i).getNome())) {
+					pal = lista.get(i);
+					pal.setOcorrencia(lista.get(i).getOcorrencia() + 1);
+					lista.set(i, pal);
+
+					palavra = null;
+					i = lista.size() + 100;
+					break;
+				}
+			}
+			if (palavra != null) {
+				pal = new Palavra();
+				pal.setId(0);
+				palavra.replace(";", "");
+				pal.setNome(palavra);
+				pal.setOcorrencia(1);
+				lista.add(pal);
+			}
+
+		}
+		return lista;
+	}
+
 	private void atualizarTabela() {
 		model.removeTudo();
 
-		List<?> lista = banco.listarObjetos(Palavra.class, "ocorrencia");
+		List<?> lista = banco.listarObjetosDesc(Palavra.class, "ocorrencia");
 		System.out.println(lista.size());
 		
 		for (int i = 0; i < lista.size(); i++) {

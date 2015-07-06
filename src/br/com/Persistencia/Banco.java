@@ -116,10 +116,26 @@ public class Banco {
 		}
 	}
 	
-	public List<?> listarObjetos(Class<?> classe, String ordanacao){
+	public List<?> listarObjetosDesc(Class<?> classe, String ordanacao){
 		try{
 			sessao = HibernateUtil.getSession().openSession();
 			Criteria criteria = sessao.createCriteria(classe).addOrder(Order.desc(ordanacao));
+			
+			
+			
+			return  criteria.list();
+		}catch(Exception e){
+			e.printStackTrace();
+			System.out.println("erro : "+e);
+			return null;
+		}finally{
+			sessao.close();
+		}
+	}
+	public List<?> listarObjetosAsc(Class<?> classe, String ordanacao){
+		try{
+			sessao = HibernateUtil.getSession().openSession();
+			Criteria criteria = sessao.createCriteria(classe).addOrder(Order.asc(ordanacao));
 			
 			
 			
