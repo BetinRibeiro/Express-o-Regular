@@ -304,9 +304,8 @@ public class JPrincipal extends JFrame implements ActionListener {
 			palavraBanco.setNome(palavraBanco.getNome().replace(";", "").replace(".", "")
 					.replace(",", "").replace("_", "").replace("(", "").replace(")", "").replace(" ", ""));
 			palavraBanco.setMateria("DIREITO PREVIDENCIARIO");
-			palavraBanco.setOcorrencia(palavraBanco.getOcorrencia()+1);
 			banco.salvarOuAtualizarObjeto(palavraBanco);
-			if (palavraBanco.getQuantProvas()<=2 || palavraBanco.getNome().equals("")) {
+			if (palavraBanco.getQuantProvas()<2 || palavraBanco.getNome().equals("")) {
 				
 				//JOptionPane.showMessageDialog(null, "palavra igual: "+palavra.getNome());
 
@@ -503,7 +502,6 @@ public class JPrincipal extends JFrame implements ActionListener {
 				palavraBanco.setQuantProvas(palavraBanco.getQuantProvas() + 1);
 				banco.salvarOuAtualizarObjeto(palavraBanco);
 				palavra = null;
-				System.out.println("Encontrou palavra igual");
 				break;
 			}
 		}

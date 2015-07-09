@@ -145,7 +145,6 @@ public class JAdicionaLei extends JFrame {
 				ArtigoLei art = new ArtigoLei();
 				
 				art.setConteudo(lista.get(i).getConteudo());
-				//System.out.println("tamanho "+art.getConteudo().length());
 				art.setLei(lista.get(i).getLei());
 				art.setNome(lista.get(i).getNome());
 				art.setPrioridade(0);
@@ -166,17 +165,12 @@ public class JAdicionaLei extends JFrame {
 		ArrayList<ArtigoLei> lista = new ArrayList<ArtigoLei>();
 
 		int a = texto.indexOf("Art.", 0);
-		a++;
-		int b = texto.indexOf("Art.", a);
-
-		int c = texto.indexOf(".", a);
-
-		c++;
-		c = texto.indexOf(".", c);
-
-		String nome = texto.substring(a - 1, c);
-
+		
+		int b = texto.indexOf("Art.", a+1);
+		
 		String conteudo = texto.substring(a - 1, b);
+		String nome = conteudo.substring(1, 10);
+		a++;
 
 		ArtigoLei art = new ArtigoLei();
 
@@ -185,37 +179,30 @@ public class JAdicionaLei extends JFrame {
 		art.setLei(txtNomeLei.getText());
 		art.setPrioridade(0);
 
-		System.out.println("Art: " + art.getNome() + " fim");
-		System.out.println(art.getConteudo());
 		lista.add(art);
-		System.out.println("_______________________________________________________________________________");
 
-		while (b != -1) {
-			a = b + 1;
+		while (b != -1 && b!=texto.length()) {
+			
+			
+			 a = texto.indexOf("Art.", a);
+			
+			 b = texto.indexOf("Art.", a+1);
+			 if (b==-1) {
+					b=texto.length();
+				}
 
-			b = texto.indexOf("Art.", a);
+			 conteudo = texto.substring(a - 1, b);
+			 nome = conteudo.substring(1, 10);
+			a++;
 
-			c = texto.indexOf(".", a);
+			 art = new ArtigoLei();
 
-			c++;
-			c = texto.indexOf(".", c);
 
-			System.out.println(a);
-			System.out.println(b);
-			nome = texto.substring(a - 1, c);
-
-			if (b!=-1) {
+			
 				conteudo = texto.substring(a - 1, b);
 				
-			}else {
-				conteudo = texto.substring(a - 1, texto.length());
-			}
 			
-
-			a = b + 1;
-
-			b = texto.indexOf("Art.", a);
-
+			
 			art = new ArtigoLei();
 
 			art.setNome(nome);
@@ -223,34 +210,28 @@ public class JAdicionaLei extends JFrame {
 			art.setLei(txtNomeLei.getText());
 			art.setPrioridade(0);
 
-			System.out.println("Art: " + art.getNome() + " fim");
-			System.out.println(art.getConteudo());
 			lista.add(art);
 			
-			System.out.println("_______________________________________________________________________________");
 
 		}
+		
 		return lista;
 
 	}
 	private void organizaArtigosLei() {
 		ArrayList<?> lista =  (ArrayList<?>) banco.listarObjetosAsc(ArtigoLei.class, "id");
 		
-		System.out.println(lista.size());
 		for (int i = 0; i < lista.size(); i++) {
 			ArtigoLei ar = (ArtigoLei) lista.get(i);
 //			System.out.println(ar.getId() +" - "+ar.getConteudo().length());
 			int comp = ar.getNome().length(); 
 			if (comp>8) {
 				int n = i-1;
-				System.out.println("um antes .."+n);
 				ArtigoLei art = (ArtigoLei) lista.get(n);
-				System.out.println(art.getNome());
 				art.setConteudo(art.getConteudo()+ar.getConteudo());
 				
 				banco.salvarOuAtualizarObjeto(art);
 				banco.deletarObjeto(ar);
-				System.out.println("deletou obj com id "+ar.getId());
 				
 			}
 			
