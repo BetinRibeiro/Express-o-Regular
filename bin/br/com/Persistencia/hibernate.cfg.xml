@@ -16,6 +16,7 @@
 		<mapping class="br.com.Bin.Banca" />
 		<mapping class="br.com.Bin.Instituicao" />
 		<mapping class="br.com.Bin.ArtigoLei" />
+			<mapping class="br.com.Bin.Restricao" />
 		
 		
 

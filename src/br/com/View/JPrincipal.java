@@ -43,13 +43,13 @@ public class JPrincipal extends JFrame implements ActionListener {
 
 	private Banco banco = new Banco();
 	private JTextArea textArea;
-	private JComboBox box;
+	private JComboBox boxMateria;
 	private JComboBox boxBanca;
 	private JComboBox boxAno;
 	private JComboBox boxNivel;
 	private String materia;
-	private JComboBox boxInstituicao;
-	private JMenuItem mntmExcluirOcorrencia;
+	private JMenuItem mntmPalavra;
+	private JTextField txtDescricao;
 
 	/**
 	 * Launch the application.
@@ -79,52 +79,58 @@ public class JPrincipal extends JFrame implements ActionListener {
 		menuBar.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		setJMenuBar(menuBar);
 
-		JMenu mnArquivo = new JMenu("Arquivo");
+		JMenu mnArquivo = new JMenu("Cadastro");
 		menuBar.add(mnArquivo);
 
-		JMenuItem mntmSalvarArquivo = new JMenuItem("Salvar Arquivo");
-		mnArquivo.add(mntmSalvarArquivo);
+		JMenuItem mntmMateria = new JMenuItem("Materia");
+		mnArquivo.add(mntmMateria);
 
-		JMenuItem mntmCriarClasse = new JMenuItem("Criar Classe");
-		mnArquivo.add(mntmCriarClasse);
+		JMenuItem mntmBanca = new JMenuItem("Banca");
+		mnArquivo.add(mntmBanca);
 
-		JMenuItem mntmCriaBanca = new JMenuItem("Cria Banca");
-		mnArquivo.add(mntmCriaBanca);
+		JMenuItem mntmAno = new JMenuItem("Ano");
+		mnArquivo.add(mntmAno);
 
-		JMenuItem mntmCriaInstituio = new JMenuItem(
-				"Cria Institui\u00E7\u00E3o");
-		mnArquivo.add(mntmCriaInstituio);
+		JMenuItem mntmNivel = new JMenuItem("Nivel");
+		mnArquivo.add(mntmNivel);
 
 		JMenuItem mntmSair = new JMenuItem("Sair");
 		mnArquivo.add(mntmSair);
 
-		JMenu mnRelatorio = new JMenu("Relatorio");
+		JMenu mnRelatorio = new JMenu("Adicionar");
 		menuBar.add(mnRelatorio);
 
-		JMenuItem mntmRelatorioProvas = new JMenuItem("Relatorio Lei");
-		mnRelatorio.add(mntmRelatorioProvas);
+		JMenuItem mntmLegislacao = new JMenuItem("Legisla\u00E7\u00E3o");
+		mnRelatorio.add(mntmLegislacao);
 
-		JMenuItem mntmRelatorioPalavras = new JMenuItem("Relatorio Palavras");
-		mnRelatorio.add(mntmRelatorioPalavras);
-		
-		JMenu mnExtra = new JMenu("Extra");
+		JMenuItem mntmRestrincao = new JMenuItem("Restrin\u00E7\u00F5es");
+		mnRelatorio.add(mntmRestrincao);
+
+		JMenu mnExtra = new JMenu("Relatorio");
 		menuBar.add(mnExtra);
-		
-		mntmExcluirOcorrencia = new JMenuItem("Excluir 1 Ocorrencia");
-		mnExtra.add(mntmExcluirOcorrencia);
-		
-		JMenuItem mntmAdicionarLei = new JMenuItem("Adicionar Lei");
-		mnExtra.add(mntmAdicionarLei);
-		
+
+		mntmPalavra = new JMenuItem("Palavras");
+		mnExtra.add(mntmPalavra);
+
+		JMenuItem mntmRelatorioLegislacao = new JMenuItem(
+				"Relatorio Legisla\u00E7\u00E3o");
+		mnExtra.add(mntmRelatorioLegislacao);
+
 		JMenuItem mntmOutro = new JMenuItem("Outro");
 		mnExtra.add(mntmOutro);
+
+		JMenu mnExcluir = new JMenu("Excluir");
+		menuBar.add(mnExcluir);
+
+		JMenuItem mntmOcorrencia = new JMenuItem("Palavras Pouco Ocorridas");
+		mnExcluir.add(mntmOcorrencia);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 124, 686, 460);
+		scrollPane.setBounds(10, 124, 686, 493);
 		contentPane.add(scrollPane);
 
 		textArea = new JTextArea();
@@ -143,9 +149,9 @@ public class JPrincipal extends JFrame implements ActionListener {
 		label.setBounds(10, 15, 80, 25);
 		contentPane.add(label);
 
-		box = new JComboBox(listaMaterias());
-		box.setBounds(95, 15, 245, 25);
-		contentPane.add(box);
+		boxMateria = new JComboBox(listaMaterias());
+		boxMateria.setBounds(95, 15, 245, 25);
+		contentPane.add(boxMateria);
 
 		JLabel lblBanca = new JLabel("Banca");
 		lblBanca.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -178,27 +184,91 @@ public class JPrincipal extends JFrame implements ActionListener {
 		boxNivel.setBounds(452, 15, 245, 25);
 		contentPane.add(boxNivel);
 
-		JLabel lblInstituio = new JLabel("Institui\u00E7\u00E3o");
+		JLabel lblInstituio = new JLabel("Descri\u00E7\u00E3o");
 		lblInstituio.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblInstituio.setBounds(194, 51, 80, 25);
 		contentPane.add(lblInstituio);
 
-		boxInstituicao = new JComboBox(listaInstituicao());
-		boxInstituicao.setBounds(284, 50, 412, 25);
-		contentPane.add(boxInstituicao);
+		txtDescricao = new JTextField();
+		txtDescricao.setBounds(284, 51, 412, 25);
+		contentPane.add(txtDescricao);
+		txtDescricao.setColumns(10);
 
 		btnCancelar.addActionListener(this);
 		btnSalvar.addActionListener(this);
 
-		mntmCriarClasse.addActionListener(this);
-		mntmRelatorioPalavras.addActionListener(this);
-		mntmRelatorioProvas.addActionListener(this);
+		mntmBanca.addActionListener(this);
+		mntmRestrincao.addActionListener(this);
+		mntmLegislacao.addActionListener(this);
 		mntmSair.addActionListener(this);
-		mntmSalvarArquivo.addActionListener(this);
-		mntmCriaBanca.addActionListener(this);
-		mntmCriaInstituio.addActionListener(this);
-		mntmExcluirOcorrencia.addActionListener(this);
-		mntmAdicionarLei.addActionListener(this);
+		mntmMateria.addActionListener(this);
+		mntmAno.addActionListener(this);
+		mntmNivel.addActionListener(this);
+		mntmPalavra.addActionListener(this);
+		mntmRelatorioLegislacao.addActionListener(this);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String acao = e.getActionCommand();
+
+		switch (acao) {
+		case "Cancelar":
+			textArea.setText("");
+			break;
+		case "Salvar":
+			salvar();
+			break;
+		case "Materia":
+			criaMateria();
+			break;
+		case "Banca":
+			criaBanca();
+			break;
+			
+		case "Ano":
+			criaAno();
+			break;
+		case "Nivel":
+			criaNivel();
+			break;
+		case "Legisla\u00E7\u00E3o":
+			JAdicionaLei lei = new JAdicionaLei();
+			lei.setVisible(true);
+			break;
+		case "Sair":
+			dispose();
+			break;
+		case "Palavras":
+			JListaPalavra frame = new JListaPalavra();
+			frame.setVisible(true);
+			break;
+		case "Palavras Pouco Ocorridas":
+			excluirOcorrencia();
+			break;
+		case "Relatorio Legisla\u00E7\u00E3o":
+			JListaLegislacao n = new JListaLegislacao();
+			n.setVisible(true);
+			break;
+		case "Restrinções":
+			JRestricoes fram = new JRestricoes();
+			fram.setVisible(true);
+			break;
+			
+		default:
+			break;
+		}
+	}
+	
+	
+	private void criaNivel() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void criaAno() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private String[] listaInstituicao() {
@@ -231,8 +301,8 @@ public class JPrincipal extends JFrame implements ActionListener {
 	private String[] listaBancas() {
 
 		@SuppressWarnings("unchecked")
-		List<Object> listaObj = (List<Object>) banco.listarObjetosAsc(Banca.class,
-				"nome");
+		List<Object> listaObj = (List<Object>) banco.listarObjetosAsc(
+				Banca.class, "nome");
 		String[] lista = new String[listaObj.size()];
 		for (int i = 0; i < listaObj.size(); i++) {
 			Banca materi = (Banca) listaObj.get(i);
@@ -242,77 +312,29 @@ public class JPrincipal extends JFrame implements ActionListener {
 		return lista;
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		String acao = e.getActionCommand();
-
-		// atualizaBox();
-
-		// System.out.println(acao);
-
-		switch (acao) {
-		case "Adicionar Lei":
-			JAdicionaLei lei = new JAdicionaLei();
-			lei.setVisible(true);
-			break;
-		case "Criar Classe":
-			criaClasse();
-			break;
-		case "Sair":
-			dispose();
-			break;
-		case "Relatorio Provas":
-			JOptionPane.showMessageDialog(null, "Não implementado ainda");
-			break;
-		case "Relatorio Palavras":
-			JListaPalavra frame = new JListaPalavra();
-			frame.setVisible(true);
-			break;
-		case "Cancelar":
-			textArea.setText("");
-			break;
-		case "Salvar":
-			salvar();
-			break;
-
-		case "Cria Banca":
-			criaBanca();
-			break;
-		case "Cria Institui\u00E7\u00E3o":
-			criaInstituicao();
-			break;
-			
-		case "Excluir 1 Ocorrencia":
-			excluirOcorrencia();
-			break;
-			
-
-		default:
-			break;
-		}
-
-	}
-
 	private void excluirOcorrencia() {
 
 		@SuppressWarnings("unchecked")
-		ArrayList<Object> listaBanco = (ArrayList<Object>) banco.listarObjetosAsc(
-				Palavra.class, "nome");
+		ArrayList<Object> listaBanco = (ArrayList<Object>) banco
+				.listarObjetosAsc(Palavra.class, "nome");
 
 		for (int i = 0; i < listaBanco.size(); i++) {
 			Palavra palavraBanco = (Palavra) listaBanco.get(i);
-			palavraBanco.setNome(palavraBanco.getNome().replace(";", "").replace(".", "")
-					.replace(",", "").replace("_", "").replace("(", "").replace(")", "").replace(" ", ""));
+			palavraBanco.setNome(palavraBanco.getNome().replace(";", "")
+					.replace(".", "").replace(",", "").replace("_", "")
+					.replace("(", "").replace(")", "").replace(" ", ""));
 			palavraBanco.setMateria("DIREITO PREVIDENCIARIO");
 			banco.salvarOuAtualizarObjeto(palavraBanco);
-			if (palavraBanco.getQuantProvas()<2 || palavraBanco.getNome().equals("")) {
-				
-				//JOptionPane.showMessageDialog(null, "palavra igual: "+palavra.getNome());
+			if (palavraBanco.getQuantProvas() < 2
+					|| palavraBanco.getNome().equals("")) {
+
+				// JOptionPane.showMessageDialog(null,
+				// "palavra igual: "+palavra.getNome());
 
 				banco.deletarObjeto(palavraBanco);
 			}
 		}
-		
+
 	}
 
 	private void criaInstituicao() {
@@ -343,21 +365,18 @@ public class JPrincipal extends JFrame implements ActionListener {
 
 	private void atualizaBox() {
 
-		contentPane.remove(box);
+		contentPane.remove(boxMateria);
 		contentPane.remove(boxBanca);
-		contentPane.remove(boxInstituicao);
 
-		boxInstituicao = new JComboBox(listaInstituicao());
-		boxInstituicao.setBounds(284, 50, 412, 25);
-		contentPane.add(boxInstituicao);
+		txtDescricao.setText("");
 
 		boxBanca = new JComboBox(listaBancas());
 		boxBanca.setBounds(95, 50, 89, 25);
 		contentPane.add(boxBanca);
 
-		box = new JComboBox(listaMaterias());
-		box.setBounds(95, 15, 245, 25);
-		contentPane.add(box);
+		boxMateria = new JComboBox(listaMaterias());
+		boxMateria.setBounds(95, 15, 245, 25);
+		contentPane.add(boxMateria);
 		invalidate();
 		validate();
 		repaint();
@@ -366,11 +385,7 @@ public class JPrincipal extends JFrame implements ActionListener {
 
 	private void salvar() {
 
-		String descricao = boxBanca.getSelectedItem() + ", Ano - "
-				+ boxAno.getSelectedItem() + ", nivel -"
-				+ boxNivel.getSelectedItem() + " Materia - "
-				+ box.getSelectedItem() + "Descrição - "
-				+ boxInstituicao.getSelectedItem();
+		String descricao = txtDescricao.getText();
 
 		String texto = textArea.getText();
 
@@ -380,24 +395,20 @@ public class JPrincipal extends JFrame implements ActionListener {
 
 		String txtIndicador = texto.substring(a, b + 100);
 
-		materia = (String) box.getSelectedItem();
+		materia = (String) boxMateria.getSelectedItem();
 
 		salvaProva(descricao, txtIndicador, materia, texto);
 
 		listarTudo(listaNomes(texto));
 
-		// TODO restante da implementação
 
 		atualizaBox();
 
-		// String txtIndicador =
 
 	}
 
 	public static ArrayList<Palavra> listaNomes(String texto) {
 
-		// texto.replaceAll(".","").replaceAll(",","").replaceAll(";","");
-		// texto.replaceAll("\\(","").replaceAll("\\)","").replace("-","");
 
 		// cria uma lista para poder armazenar as palavras
 		ArrayList<Palavra> lista = new ArrayList<Palavra>();
@@ -433,7 +444,8 @@ public class JPrincipal extends JFrame implements ActionListener {
 
 			// coleta a proxima palavra
 			palavra = texto.substring(a, b).replace(";", "").replace(".", "")
-					.replace(",", "").replace("_", "").replace("(", "").replace(")", "").replace(":", "");
+					.replace(",", "").replace("_", "").replace("(", "")
+					.replace(")", "").replace(":", "");
 			// modifica o ponto de partida
 			a = b + 1;
 			// modifica o ponto apos o da partida para poder pegar a proxima
@@ -487,15 +499,17 @@ public class JPrincipal extends JFrame implements ActionListener {
 	public void salvaPalavra(Palavra palavra) {
 
 		@SuppressWarnings("unchecked")
-		ArrayList<Object> listaBanco = (ArrayList<Object>) banco.listarObjetosAsc(
-				Palavra.class, "nome");
+		ArrayList<Object> listaBanco = (ArrayList<Object>) banco
+				.listarObjetosAsc(Palavra.class, "nome");
 
 		for (int i = 0; i < listaBanco.size(); i++) {
 			Palavra palavraBanco = (Palavra) listaBanco.get(i);
 			if (palavraBanco.getNome().equalsIgnoreCase(palavra.getNome())
-					&& palavraBanco.getMateria().equalsIgnoreCase(palavra.getMateria())) {
-				
-				//JOptionPane.showMessageDialog(null, "palavra igual: "+palavra.getNome());
+					&& palavraBanco.getMateria().equalsIgnoreCase(
+							palavra.getMateria())) {
+
+				// JOptionPane.showMessageDialog(null,
+				// "palavra igual: "+palavra.getNome());
 
 				palavraBanco.setOcorrencia(palavraBanco.getOcorrencia()
 						+ palavra.getOcorrencia());
@@ -516,8 +530,8 @@ public class JPrincipal extends JFrame implements ActionListener {
 			String materia, String texto) {
 		Prova prov = new Prova();
 		@SuppressWarnings("unchecked")
-		List<Object> listaObj = (List<Object>) banco.listarObjetosAsc(Prova.class,
-				"id");
+		List<Object> listaObj = (List<Object>) banco.listarObjetosAsc(
+				Prova.class, "id");
 		for (int i = 0; i < listaObj.size(); i++) {
 			Prova prova = (Prova) listaObj.get(i);
 
@@ -543,8 +557,8 @@ public class JPrincipal extends JFrame implements ActionListener {
 
 	}
 
-	private void criaClasse() {
-		String nomeClasse = JOptionPane.showInputDialog("Nome da Classe: ");
+	private void criaMateria() {
+		String nomeClasse = JOptionPane.showInputDialog("Nome da Materia: ");
 
 		Materia materia = new Materia();
 

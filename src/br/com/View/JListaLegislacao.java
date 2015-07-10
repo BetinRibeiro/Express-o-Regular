@@ -2,36 +2,34 @@ package br.com.View;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JButton;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-
-import br.com.TableModel.*;
-import br.com.Bin.*;
-import br.com.Persistencia.*;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-public class JListaPalavra extends JFrame {
+import br.com.Bin.ArtigoLei;
+import br.com.Bin.Palavra;
+import br.com.Persistencia.Banco;
+import br.com.TableModel.ModelLegislacao;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JButton;
+
+public class JListaLegislacao extends JFrame {
 
 	private JPanel contentPane;
-	private JTable table;
-	
-	private ModelPalavras model = new ModelPalavras();
 	private Banco banco = new Banco();
+	private JTable table;
+	private ModelLegislacao model = new ModelLegislacao();
 
 	/**
 	 * Launch the application.
@@ -40,7 +38,7 @@ public class JListaPalavra extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					JListaPalavra frame = new JListaPalavra();
+					JListaLegislacao frame = new JListaLegislacao();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -52,106 +50,71 @@ public class JListaPalavra extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public JListaPalavra() {
-		setTitle("Lista de Ocorrencia das Palavras");
+	public JListaLegislacao() {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(730, 0, 632, 700);
+		
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		JMenu mnZerar = new JMenu("Zerar");
+		menuBar.add(mnZerar);
+		
+		JMenuItem mntmPrioridades = new JMenuItem("Zerar Prioridades");
+		mntmPrioridades.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent arg0) {
+				zararOcorrencia();
+				
+			}
+				private void zararOcorrencia() {
+					ArrayList<?> lista = (ArrayList<?>) banco.listarObjetosAsc(ArtigoLei.class, "id");
+					
+					for (int i = 0; i < lista.size(); i++) {
+						System.out.println("Entrou");
+						ArtigoLei artigo = (ArtigoLei) lista.get(i);
+						artigo.setPrioridade(0);
+						banco.salvarOuAtualizarObjeto(artigo);
+					}
+					atualizarTabela();
+							
+					
+				}
+		});
+		mnZerar.add(mntmPrioridades);
+		
+		JMenu mnProcessar = new JMenu("Processar");
+		menuBar.add(mnProcessar);
+		
+		JMenuItem mntmProcessarPrioridade = new JMenuItem("Processar Prioridade");
+		mntmProcessarPrioridade.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				processar();
+				atualizarTabela();
+				
+			}
+		});
+		mnProcessar.add(mntmProcessarPrioridade);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-
+		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 44, 596, 573);
+		scrollPane.setBounds(10, 21, 596, 552);
 		contentPane.add(scrollPane);
-
+		
 		table = new JTable(model);
-
-		// tabela com colunas fixasv
-		table.getTableHeader().setReorderingAllowed(false);
-		// tamanho especifico da coluna
-		table.getColumn("Nome").setPreferredWidth(250);
-
-		// seleciona apenas uma linha
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
 		scrollPane.setViewportView(table);
-
-		JButton btnAtualizar = new JButton("Atualizar");
-		btnAtualizar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				atualizarTabela();
-			}
-		});
-		btnAtualizar.setBounds(10, 628, 89, 23);
-		contentPane.add(btnAtualizar);
-
-		JButton btnDeletar = new JButton("Deletar");
-		btnDeletar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				try {
-					Integer id = (Integer) table.getValueAt(
-							table.getSelectedRow(), 0);
-
-					Palavra pala = (Palavra) banco.buscarPorId(Palavra.class, id);
-					banco.deletarObjeto(pala);
-
-					
-					atualizarTabela();
-				} catch (Exception ea) {
-					JOptionPane.showMessageDialog(null, "ERRO - " + ea
-							+ ".(Selecione uma palavra para deletar!!) ");
-				}
-				
-			}
-		});
-		btnDeletar.setBounds(109, 628, 89, 23);
-		contentPane.add(btnDeletar);
 		
 		JButton btnSair = new JButton("Sair");
 		btnSair.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
-		btnSair.setBounds(208, 628, 89, 23);
+		btnSair.setBounds(10, 588, 89, 23);
 		contentPane.add(btnSair);
-		
-		JMenuBar menuBar = new JMenuBar();
-		menuBar.setBounds(0, 0, 620, 21);
-		contentPane.add(menuBar);
-		
-		JMenu mnExcluir = new JMenu("Excluir");
-		menuBar.add(mnExcluir);
-		
-		JMenuItem mntmRestrines = new JMenuItem("Restrin\u00E7\u00F5es");
-		mntmRestrines.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				retirarRestrincoes();
-				
-			}
-
-			private void retirarRestrincoes() {
-				ArrayList<?> listaRestrincao = (ArrayList<?>) banco.listarObjetosDesc(Restricao.class, "id");
-				ArrayList<?> listaPalavras = (ArrayList<?>) banco.listarObjetosDesc(Palavra.class, "ocorrencia");
-
-				for (int i = 0; i < listaRestrincao.size(); i++) {
-					for (int j = 0; j < listaPalavras.size(); j++) {
-						Restricao restrincao = (Restricao) listaRestrincao.get(i);
-						Palavra palavra = (Palavra) listaPalavras.get(j);
-						if (restrincao.getNome().equals(palavra.getNome())) {
-							System.out.println(palavra.getNome());
-							banco.deletarObjeto(palavra);
-							break;
-						}
-					}
-					
-				}
-				
-			}
-		});
-		mnExcluir.add(mntmRestrines);
 		
 		atualizarTabela();
 	}
@@ -167,6 +130,7 @@ public class JListaPalavra extends JFrame {
 			for (int j = 0; j < listaArtigos.size(); j++) {
 				
 				ArtigoLei artigo = (ArtigoLei) listaArtigos.get(j);
+				
 				
 				ArrayList<Palavra> listaPalavraArtigo = listaOcorrencia(artigo.getConteudo());
 				
@@ -188,6 +152,7 @@ public class JListaPalavra extends JFrame {
 			
 		}
 	}
+
 	private ArrayList<Palavra> listaOcorrencia(String texto) {
 		// texto.replaceAll(".","").replaceAll(",","").replaceAll(";","");
 		// texto.replaceAll("\\(","").replaceAll("\\)","").replace("-","");
@@ -259,16 +224,15 @@ public class JListaPalavra extends JFrame {
 		}
 		return lista;
 	}
-
 	private void atualizarTabela() {
 		model.removeTudo();
 
-		List<?> lista = banco.listarObjetosDesc(Palavra.class, "ocorrencia");
+		List<?> lista = banco.listarObjetosDesc(ArtigoLei.class, "prioridade");
 		System.out.println(lista.size());
 		
 		for (int i = 0; i < lista.size(); i++) {
-			Palavra palavra = (Palavra) lista.get(i);
-			model.addRow(palavra);
+			ArtigoLei art = (ArtigoLei) lista.get(i);
+			model.addRow(art);
 
 		}
 	}

@@ -56,7 +56,7 @@ public class JAdicionaLei extends JFrame {
 	 */
 	public JAdicionaLei() {
 		setTitle("Ordenando uma Lei ");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(730, 0, 632, 700);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -64,7 +64,7 @@ public class JAdicionaLei extends JFrame {
 		contentPane.setLayout(null);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 82, 686, 533);
+		scrollPane.setBounds(10, 82, 596, 533);
 		contentPane.add(scrollPane);
 
 		txtConteudo = new JTextArea();
@@ -123,19 +123,6 @@ public class JAdicionaLei extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBounds(0, 0, 706, 21);
 		contentPane.add(menuBar);
-		
-		JMenu mnArquivo = new JMenu("Arquivo");
-		menuBar.add(mnArquivo);
-		
-		JMenuItem mntmOrganizar = new JMenuItem("Organizar");
-		mntmOrganizar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				organizaArtigosLei();
-			}
-
-			
-		});
-		mnArquivo.add(mntmOrganizar);
 	}
 	
 	private void confereSalvaBanco(ArrayList<ArtigoLei> lista) {
@@ -216,26 +203,6 @@ public class JAdicionaLei extends JFrame {
 		}
 		
 		return lista;
-
-	}
-	private void organizaArtigosLei() {
-		ArrayList<?> lista =  (ArrayList<?>) banco.listarObjetosAsc(ArtigoLei.class, "id");
-		
-		for (int i = 0; i < lista.size(); i++) {
-			ArtigoLei ar = (ArtigoLei) lista.get(i);
-//			System.out.println(ar.getId() +" - "+ar.getConteudo().length());
-			int comp = ar.getNome().length(); 
-			if (comp>8) {
-				int n = i-1;
-				ArtigoLei art = (ArtigoLei) lista.get(n);
-				art.setConteudo(art.getConteudo()+ar.getConteudo());
-				
-				banco.salvarOuAtualizarObjeto(art);
-				banco.deletarObjeto(ar);
-				
-			}
-			
-		}
 
 	}
 }
