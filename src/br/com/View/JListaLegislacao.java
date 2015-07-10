@@ -1,6 +1,5 @@
 package br.com.View;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -24,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JButton;
 
+@SuppressWarnings("serial")
 public class JListaLegislacao extends JFrame {
 
 	private JPanel contentPane;
@@ -52,7 +52,7 @@ public class JListaLegislacao extends JFrame {
 	 */
 	public JListaLegislacao() {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(730, 0, 632, 700);
+		setBounds(730, 0, 632, 350);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -101,7 +101,7 @@ public class JListaLegislacao extends JFrame {
 		contentPane.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 21, 596, 552);
+		scrollPane.setBounds(10, 21, 596, 225);
 		contentPane.add(scrollPane);
 		
 		table = new JTable(model);
@@ -113,8 +113,17 @@ public class JListaLegislacao extends JFrame {
 				dispose();
 			}
 		});
-		btnSair.setBounds(10, 588, 89, 23);
+		btnSair.setBounds(10, 257, 89, 23);
 		contentPane.add(btnSair);
+		
+		JButton btnAtualizar = new JButton("Atualizar");
+		btnAtualizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				atualizarTabela();
+			}
+		});
+		btnAtualizar.setBounds(109, 257, 89, 23);
+		contentPane.add(btnAtualizar);
 		
 		atualizarTabela();
 	}

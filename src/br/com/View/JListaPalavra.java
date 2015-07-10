@@ -1,6 +1,5 @@
 package br.com.View;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +24,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+@SuppressWarnings("serial")
 public class JListaPalavra extends JFrame {
 
 	private JPanel contentPane;
@@ -55,14 +55,14 @@ public class JListaPalavra extends JFrame {
 	public JListaPalavra() {
 		setTitle("Lista de Ocorrencia das Palavras");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(730, 0, 632, 700);
+		setBounds(730, 350, 632, 350);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 44, 596, 573);
+		scrollPane.setBounds(10, 44, 596, 222);
 		contentPane.add(scrollPane);
 
 		table = new JTable(model);
@@ -83,7 +83,7 @@ public class JListaPalavra extends JFrame {
 				atualizarTabela();
 			}
 		});
-		btnAtualizar.setBounds(10, 628, 89, 23);
+		btnAtualizar.setBounds(10, 278, 89, 23);
 		contentPane.add(btnAtualizar);
 
 		JButton btnDeletar = new JButton("Deletar");
@@ -106,7 +106,7 @@ public class JListaPalavra extends JFrame {
 				
 			}
 		});
-		btnDeletar.setBounds(109, 628, 89, 23);
+		btnDeletar.setBounds(109, 278, 89, 23);
 		contentPane.add(btnDeletar);
 		
 		JButton btnSair = new JButton("Sair");
@@ -115,7 +115,7 @@ public class JListaPalavra extends JFrame {
 				dispose();
 			}
 		});
-		btnSair.setBounds(208, 628, 89, 23);
+		btnSair.setBounds(208, 278, 89, 23);
 		contentPane.add(btnSair);
 		
 		JMenuBar menuBar = new JMenuBar();
