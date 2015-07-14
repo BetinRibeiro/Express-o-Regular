@@ -206,11 +206,14 @@ public class JPrincipal extends JFrame implements ActionListener {
 		mntmNivel.addActionListener(this);
 		mntmPalavra.addActionListener(this);
 		mntmRelatorioLegislacao.addActionListener(this);
+		mntmOcorrencia.addActionListener(this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String acao = e.getActionCommand();
+		
+		System.out.println(acao);
 
 		switch (acao) {
 		case "Cancelar":
@@ -325,9 +328,9 @@ public class JPrincipal extends JFrame implements ActionListener {
 					.replace("(", "").replace(")", "").replace(" ", ""));
 			palavraBanco.setMateria("DIREITO PREVIDENCIARIO");
 			banco.salvarOuAtualizarObjeto(palavraBanco);
-			if (palavraBanco.getQuantProvas() < 2
-					|| palavraBanco.getNome().equals("")) {
-
+			if (palavraBanco.getQuantProvas() < 0
+					|| palavraBanco.getOcorrencia()<2) {
+System.out.println(palavraBanco.getNome());
 				// JOptionPane.showMessageDialog(null,
 				// "palavra igual: "+palavra.getNome());
 
