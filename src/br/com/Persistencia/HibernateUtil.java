@@ -7,7 +7,7 @@ import org.hibernate.cfg.*;
  
 public class HibernateUtil {
  
-      public static final SessionFactory session = buildSessionGactory();
+	 public static final SessionFactory session = buildSessionGactory();
 
 	@SuppressWarnings("deprecation")
 	private static SessionFactory buildSessionGactory() {

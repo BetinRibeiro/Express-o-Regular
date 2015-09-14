@@ -1,10 +1,8 @@
 package br.com.View;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.Point;
 
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JScrollPane;
@@ -12,22 +10,17 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
-import javax.transaction.Transactional.TxType;
 
 import br.com.Bin.ArtigoLei;
-import br.com.Bin.Palavra;
 import br.com.Persistencia.Banco;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 
-public class JAdicionaLei extends JFrame {
+@SuppressWarnings("serial")
+public class JAdicionaLei extends JDialog {
 
 	private JPanel contentPane;
 	private JTextField txtNomeLei;
@@ -56,12 +49,13 @@ public class JAdicionaLei extends JFrame {
 	 */
 	public JAdicionaLei() {
 		setTitle("Ordenando uma Lei ");
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(730, 0, 632, 700);
+//		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		setBounds(10, 50, 632, 700);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		this.setAlwaysOnTop(true);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 82, 596, 533);

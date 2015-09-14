@@ -11,12 +11,11 @@
 		<property name="hibernate.hbm2ddl.auto">update</property>
 
 		<mapping class="br.com.Bin.Palavra" />
-		<mapping class="br.com.Bin.Prova" />
-		<mapping class="br.com.Bin.Materia" />
-		<mapping class="br.com.Bin.Banca" />
-		<mapping class="br.com.Bin.Instituicao" />
 		<mapping class="br.com.Bin.ArtigoLei" />
-			<mapping class="br.com.Bin.Restricao" />
+		<mapping class="br.com.Bin.Classificacao" />
+		<mapping class="br.com.Bin.Opcao" />
+		<mapping class="br.com.Bin.Questao" />
+		<mapping class="br.com.Bin.Desempenho" />
 		
 		
 

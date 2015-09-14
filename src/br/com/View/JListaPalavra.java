@@ -4,7 +4,7 @@ import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JOptionPane;
@@ -20,12 +20,11 @@ import br.com.Persistencia.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
+import javax.swing.JLabel;
+import java.awt.Font;
 
 @SuppressWarnings("serial")
-public class JListaPalavra extends JFrame {
+public class JListaPalavra extends JDialog {
 
 	private JPanel contentPane;
 	private JTable table;
@@ -54,15 +53,16 @@ public class JListaPalavra extends JFrame {
 	 */
 	public JListaPalavra() {
 		setTitle("Lista de Ocorrencia das Palavras");
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(730, 350, 632, 350);
+//		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		setBounds(10, 50, 632, 435);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		this.setAlwaysOnTop(true);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 44, 596, 222);
+		scrollPane.setBounds(10, 44, 596, 308);
 		contentPane.add(scrollPane);
 
 		table = new JTable(model);
@@ -83,7 +83,7 @@ public class JListaPalavra extends JFrame {
 				atualizarTabela();
 			}
 		});
-		btnAtualizar.setBounds(10, 278, 89, 23);
+		btnAtualizar.setBounds(10, 363, 89, 23);
 		contentPane.add(btnAtualizar);
 
 		JButton btnDeletar = new JButton("Deletar");
@@ -106,7 +106,7 @@ public class JListaPalavra extends JFrame {
 				
 			}
 		});
-		btnDeletar.setBounds(109, 278, 89, 23);
+		btnDeletar.setBounds(109, 363, 89, 23);
 		contentPane.add(btnDeletar);
 		
 		JButton btnSair = new JButton("Sair");
@@ -115,79 +115,50 @@ public class JListaPalavra extends JFrame {
 				dispose();
 			}
 		});
-		btnSair.setBounds(208, 278, 89, 23);
+		btnSair.setBounds(208, 363, 89, 23);
 		contentPane.add(btnSair);
 		
-		JMenuBar menuBar = new JMenuBar();
-		menuBar.setBounds(0, 0, 620, 21);
-		contentPane.add(menuBar);
-		
-		JMenu mnExcluir = new JMenu("Excluir");
-		menuBar.add(mnExcluir);
-		
-		JMenuItem mntmRestrines = new JMenuItem("Restrin\u00E7\u00F5es");
-		mntmRestrines.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				retirarRestrincoes();
-				
-			}
-
-			private void retirarRestrincoes() {
-				ArrayList<?> listaRestrincao = (ArrayList<?>) banco.listarObjetosDesc(Restricao.class, "id");
-				ArrayList<?> listaPalavras = (ArrayList<?>) banco.listarObjetosDesc(Palavra.class, "ocorrencia");
-
-				for (int i = 0; i < listaRestrincao.size(); i++) {
-					for (int j = 0; j < listaPalavras.size(); j++) {
-						Restricao restrincao = (Restricao) listaRestrincao.get(i);
-						Palavra palavra = (Palavra) listaPalavras.get(j);
-						if (restrincao.getNome().equals(palavra.getNome())) {
-							System.out.println(palavra.getNome());
-							banco.deletarObjeto(palavra);
-							break;
-						}
-					}
-					
-				}
-				
-			}
-		});
-		mnExcluir.add(mntmRestrines);
+		JLabel lblListaDasOcorrencias = new JLabel("Lista das Ocorrencias das Pelavras");
+		lblListaDasOcorrencias.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblListaDasOcorrencias.setBounds(10, 11, 307, 22);
+		contentPane.add(lblListaDasOcorrencias);
 		
 		atualizarTabela();
 	}
-	private void processar() {
-		
-		ArrayList<?> listaPalavras = (ArrayList<?>) banco.listarObjetosDesc(Palavra.class, "ocorrencia");
-		
-		ArrayList<?> listaArtigos = (ArrayList<?>) banco.listarObjetosDesc(ArtigoLei.class, "id");
-		
-
-		for (int i = 0; i < listaPalavras.size(); i++) {
-			
-			for (int j = 0; j < listaArtigos.size(); j++) {
-				
-				ArtigoLei artigo = (ArtigoLei) listaArtigos.get(j);
-				
-				ArrayList<Palavra> listaPalavraArtigo = listaOcorrencia(artigo.getConteudo());
-				
-				for (int k = 0; k < listaPalavraArtigo.size(); k++) {
-					Palavra palavraComparada = (Palavra) listaPalavras.get(i);
-					
-					Palavra palavraArtigo = listaPalavraArtigo.get(k);
-					
-					if (palavraComparada.getNome().equals(palavraArtigo.getNome())) {
-						float prioridade = palavraComparada.getOcorrencia()/palavraComparada.getQuantProvas();
-						artigo.setPrioridade(prioridade+artigo.getPrioridade());
-						banco.salvarOuAtualizarObjeto(artigo);
-						
-					}
-					
-				}
-				
-			}
-			
-		}
-	}
+//	private void processar() {
+//		
+//		ArrayList<?> listaPalavras = (ArrayList<?>) banco.listarObjetosDesc(Palavra.class, "ocorrencia");
+//		
+//		ArrayList<?> listaArtigos = (ArrayList<?>) banco.listarObjetosDesc(ArtigoLei.class, "id");
+//		
+//
+//		for (int i = 0; i < listaPalavras.size(); i++) {
+//			
+//			for (int j = 0; j < listaArtigos.size(); j++) {
+//				
+//				ArtigoLei artigo = (ArtigoLei) listaArtigos.get(j);
+//				
+//				ArrayList<Palavra> listaPalavraArtigo = listaOcorrencia(artigo.getConteudo());
+//				
+//				for (int k = 0; k < listaPalavraArtigo.size(); k++) {
+//					Palavra palavraComparada = (Palavra) listaPalavras.get(i);
+//					
+//					Palavra palavraArtigo = listaPalavraArtigo.get(k);
+//					
+//					if (palavraComparada.getNome().equals(palavraArtigo.getNome())) {
+//						float prioridade = palavraComparada.getOcorrencia()/palavraComparada.getQuantProvas();
+//						artigo.setPrioridade(prioridade+artigo.getPrioridade());
+//						banco.salvarOuAtualizarObjeto(artigo);
+//						
+//					}
+//					
+//				}
+//				
+//			}
+//			
+//		}
+//	}
+	@SuppressWarnings("unused")
 	private ArrayList<Palavra> listaOcorrencia(String texto) {
 		// texto.replaceAll(".","").replaceAll(",","").replaceAll(";","");
 		// texto.replaceAll("\\(","").replaceAll("\\)","").replace("-","");

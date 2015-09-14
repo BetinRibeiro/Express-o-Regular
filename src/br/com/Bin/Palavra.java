@@ -14,12 +14,10 @@ public class Palavra {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(columnDefinition = "serial")
 	Integer id;
-	@Column(name = "nome")
+	@Column(name = "nome", unique=true)
 	String nome;
 	@Column(name = "ocorrencia")
 	Integer ocorrencia;
-	@Column(name = "materia")
-	String materia;
 	@Column(name = "quant_provas")
 	Integer quantProvas;
 	
@@ -42,12 +40,6 @@ public class Palavra {
 	}
 	public void setOcorrencia(Integer ocorrencia) {
 		this.ocorrencia = ocorrencia;
-	}
-	public String getMateria() {
-		return materia;
-	}
-	public void setMateria(String materia) {
-		this.materia = materia;
 	}
 	public Integer getQuantProvas() {
 		return quantProvas;

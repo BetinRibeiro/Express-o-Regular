@@ -2,7 +2,7 @@ package br.com.View;
 
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JMenuBar;
@@ -25,7 +25,7 @@ import javax.swing.JTable;
 import javax.swing.JButton;
 
 @SuppressWarnings("serial")
-public class JListaLegislacao extends JFrame {
+public class JListaLegislacao extends JDialog {
 
 	private JPanel contentPane;
 	private Banco banco = new Banco();
@@ -52,8 +52,7 @@ public class JListaLegislacao extends JFrame {
 	 * Create the frame.
 	 */
 	public JListaLegislacao() {
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(730, 0, 632, 350);
+		setBounds(10, 50, 632, 350);
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -188,20 +187,20 @@ public class JListaLegislacao extends JFrame {
 		atualizarTabela();
 	}
 
-	private void deletar() {
-		try {
-
-			Integer id = (Integer) table.getValueAt(table.getSelectedRow(), 0);
-
-			ArtigoLei art = (ArtigoLei) banco.buscarPorId(ArtigoLei.class, id);
-			banco.deletarObjeto(art);
-
-			atualizarTabela();
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, e);
-		}
-
-	}
+//	private void deletar() {
+//		try {
+//
+//			Integer id = (Integer) table.getValueAt(table.getSelectedRow(), 0);
+//
+//			ArtigoLei art = (ArtigoLei) banco.buscarPorId(ArtigoLei.class, id);
+//			banco.deletarObjeto(art);
+//
+//			atualizarTabela();
+//		} catch (Exception e) {
+//			JOptionPane.showMessageDialog(null, e);
+//		}
+//
+//	}
 
 	private void processar() {
 
