@@ -73,6 +73,9 @@ public class jCadastroQuestao extends JDialog	 {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		setType(Type.UTILITY);
+		setAlwaysOnTop(true);
+		setLocationRelativeTo(null);
 		
 
 		panelPrincipal = new JPanel();

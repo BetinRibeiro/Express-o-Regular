@@ -52,7 +52,10 @@ public class JListaLegislacao extends JDialog {
 	 * Create the frame.
 	 */
 	public JListaLegislacao() {
-		setBounds(10, 50, 632, 350);
+		setBounds(10, 50, 632, 486);
+		setType(Type.UTILITY);
+		setAlwaysOnTop(true);
+		setLocationRelativeTo(null);
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -69,26 +72,17 @@ public class JListaLegislacao extends JDialog {
 			}
 
 			private void zararOcorrencia() {
-				ArrayList<?> lista = (ArrayList<?>) banco.listarObjetosAsc(
-						ArtigoLei.class, "id");
-
-				for (int i = 0; i < lista.size(); i++) {
-					System.out.println("Entrou");
-					ArtigoLei artigo = (ArtigoLei) lista.get(i);
-					artigo.setPrioridade(0);
-					banco.salvarOuAtualizarObjeto(artigo);
-				}
-				atualizarTabela();
+				zerar();
 
 			}
+
 		});
 		mnZerar.add(mntmPrioridades);
 
 		JMenu mnProcessar = new JMenu("Processar");
 		menuBar.add(mnProcessar);
 
-		JMenuItem mntmProcessarPrioridade = new JMenuItem(
-				"Processar Prioridade");
+		JMenuItem mntmProcessarPrioridade = new JMenuItem("Processar Prioridade");
 		mntmProcessarPrioridade.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				processar();
@@ -103,7 +97,7 @@ public class JListaLegislacao extends JDialog {
 		contentPane.setLayout(null);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 21, 596, 225);
+		scrollPane.setBounds(10, 21, 596, 365);
 		contentPane.add(scrollPane);
 
 		table = new JTable(model);
@@ -115,7 +109,7 @@ public class JListaLegislacao extends JDialog {
 				dispose();
 			}
 		});
-		btnSair.setBounds(10, 257, 89, 23);
+		btnSair.setBounds(10, 397, 89, 23);
 		contentPane.add(btnSair);
 
 		JButton btnAtualizar = new JButton("Atualizar");
@@ -124,26 +118,24 @@ public class JListaLegislacao extends JDialog {
 				atualizarTabela();
 			}
 		});
-		btnAtualizar.setBounds(109, 257, 89, 23);
+		btnAtualizar.setBounds(109, 397, 89, 23);
 		contentPane.add(btnAtualizar);
 
 		JButton btnUnir = new JButton("Unir");
+		btnUnir.setVisible(false);
 		btnUnir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 
-					Integer id = (Integer) table.getValueAt(
-							table.getSelectedRow(), 0);
+					Integer id = (Integer) table.getValueAt(table.getSelectedRow(), 0);
 
-					ArtigoLei art = (ArtigoLei) banco.buscarPorId(
-							ArtigoLei.class, id);
+					ArtigoLei art = (ArtigoLei) banco.buscarPorId(ArtigoLei.class, id);
 
-					ArtigoLei artAnterior = (ArtigoLei) banco.buscarPorId(
-							ArtigoLei.class, id-1);
-					
-					System.out.println("artigo anterior " +artAnterior.getId());
-					artAnterior.setConteudo(artAnterior.getConteudo()+" "+art.getConteudo());
-					
+					ArtigoLei artAnterior = (ArtigoLei) banco.buscarPorId(ArtigoLei.class, id - 1);
+
+					System.out.println("artigo anterior " + artAnterior.getId());
+					artAnterior.setConteudo(artAnterior.getConteudo() + " " + art.getConteudo());
+
 					banco.salvarOuAtualizarObjeto(artAnterior);
 					banco.deletarObjeto(art);
 					atualizarTabela();
@@ -153,9 +145,9 @@ public class JListaLegislacao extends JDialog {
 			}
 
 		});
-		btnUnir.setBounds(208, 257, 89, 23);
+		btnUnir.setBounds(208, 397, 89, 23);
 		contentPane.add(btnUnir);
-		
+
 		JButton btnPrioridade = new JButton("Prioridade");
 		btnPrioridade.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -171,44 +163,48 @@ public class JListaLegislacao extends JDialog {
 				}
 			}
 		});
-		btnPrioridade.setBounds(307, 257, 89, 23);
+		btnPrioridade.setBounds(517, 397, 89, 23);
 		contentPane.add(btnPrioridade);
 		
-		JButton btnEsp = new JButton("esp");
-		btnEsp.addActionListener(new ActionListener() {
+		JButton btnVer = new JButton("Ver");
+		btnVer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				processar();
-				atualizarTabela();
+				ArtigoLei art = ((ArtigoLei) banco.buscarPorId(
+						ArtigoLei.class,
+						(Integer) table.getValueAt(
+								table.getSelectedRow(), 0)));
+				JVerArt j = new JVerArt(art);
+				j.setVisible(true);
 			}
 		});
-		btnEsp.setBounds(405, 257, 89, 23);
-		contentPane.add(btnEsp);
+		btnVer.setBounds(418, 397, 89, 23);
+		contentPane.add(btnVer);
 
+	
 		atualizarTabela();
 	}
 
-//	private void deletar() {
-//		try {
-//
-//			Integer id = (Integer) table.getValueAt(table.getSelectedRow(), 0);
-//
-//			ArtigoLei art = (ArtigoLei) banco.buscarPorId(ArtigoLei.class, id);
-//			banco.deletarObjeto(art);
-//
-//			atualizarTabela();
-//		} catch (Exception e) {
-//			JOptionPane.showMessageDialog(null, e);
-//		}
-//
-//	}
+	// private void deletar() {
+	// try {
+	//
+	// Integer id = (Integer) table.getValueAt(table.getSelectedRow(), 0);
+	//
+	// ArtigoLei art = (ArtigoLei) banco.buscarPorId(ArtigoLei.class, id);
+	// banco.deletarObjeto(art);
+	//
+	// atualizarTabela();
+	// } catch (Exception e) {
+	// JOptionPane.showMessageDialog(null, e);
+	// }
+	//
+	// }
 
 	private void processar() {
+		zerar();
 
-		ArrayList<?> listaPalavras = (ArrayList<?>) banco.listarObjetosDesc(
-				Palavra.class, "ocorrencia");
+		ArrayList<?> listaPalavras = (ArrayList<?>) banco.listarObjetosDesc(Palavra.class, "ocorrencia");
 
-		ArrayList<?> listaArtigos = (ArrayList<?>) banco.listarObjetosDesc(
-				ArtigoLei.class, "id");
+		ArrayList<?> listaArtigos = (ArrayList<?>) banco.listarObjetosDesc(ArtigoLei.class, "id");
 
 		for (int i = 0; i < listaPalavras.size(); i++) {
 
@@ -216,23 +212,19 @@ public class JListaLegislacao extends JDialog {
 
 				ArtigoLei artigo = (ArtigoLei) listaArtigos.get(j);
 
-				ArrayList<Palavra> listaPalavraArtigo = listaOcorrencia(artigo
-						.getConteudo());
+				ArrayList<Palavra> listaPalavraArtigo = listaOcorrencia(artigo.getConteudo());
 
 				for (int k = 0; k < listaPalavraArtigo.size(); k++) {
 					Palavra palavraComparada = (Palavra) listaPalavras.get(i);
 
 					Palavra palavraArtigo = listaPalavraArtigo.get(k);
 
-
-					
-					if (palavraComparada.getNome().equals(
-							palavraArtigo.getNome())) {
-						float prioridade = palavraComparada.getOcorrencia()
-								/ palavraComparada.getQuantProvas();
-						artigo.setPrioridade(prioridade
-								+ artigo.getPrioridade());
+					if (palavraComparada.getNome().equals(palavraArtigo.getNome())) {
+						float prioridade = palavraComparada.getOcorrencia() / palavraComparada.getQuantProvas();
+						artigo.setPrioridade(prioridade + artigo.getPrioridade());
 						banco.salvarOuAtualizarObjeto(artigo);
+						System.out.println("numero do laço " + i);
+						System.out.println("Tamanho total " + listaPalavras.size());
 
 					}
 
@@ -280,9 +272,8 @@ public class JListaLegislacao extends JDialog {
 		while (b != -1) {
 
 			// coleta a proxima palavra
-			palavra = texto.substring(a, b).replace(";", "").replace(".", "")
-					.replace(",", "").replace("_", "").replace("(", "")
-					.replace(")", "").replace(":", "");
+			palavra = texto.substring(a, b).replace(";", "").replace(".", "").replace(",", "").replace("_", "")
+					.replace("(", "").replace(")", "").replace(":", "");
 			// modifica o ponto de partida
 			a = b + 1;
 			// modifica o ponto apos o da partida para poder pegar a proxima
@@ -327,5 +318,18 @@ public class JListaLegislacao extends JDialog {
 			model.addRow(art);
 
 		}
+	}
+
+	private void zerar() {
+		ArrayList<?> lista = (ArrayList<?>) banco.listarObjetosAsc(ArtigoLei.class, "id");
+
+		for (int i = 0; i < lista.size(); i++) {
+			System.out.println("Entrou");
+			ArtigoLei artigo = (ArtigoLei) lista.get(i);
+			artigo.setPrioridade(0);
+			banco.salvarOuAtualizarObjeto(artigo);
+		}
+		atualizarTabela();
+
 	}
 }

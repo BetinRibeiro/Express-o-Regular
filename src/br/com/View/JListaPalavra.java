@@ -60,6 +60,9 @@ public class JListaPalavra extends JDialog {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		this.setAlwaysOnTop(true);
+		setType(Type.UTILITY);
+		setAlwaysOnTop(true);
+		setLocationRelativeTo(null);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 44, 596, 308);
@@ -118,7 +121,7 @@ public class JListaPalavra extends JDialog {
 		btnSair.setBounds(208, 363, 89, 23);
 		contentPane.add(btnSair);
 		
-		JLabel lblListaDasOcorrencias = new JLabel("Lista das Ocorrencias das Pelavras");
+		JLabel lblListaDasOcorrencias = new JLabel("Lista das Ocorrencias das Palavras");
 		lblListaDasOcorrencias.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblListaDasOcorrencias.setBounds(10, 11, 307, 22);
 		contentPane.add(lblListaDasOcorrencias);

@@ -3,7 +3,6 @@ package br.com.View;
 import java.awt.EventQueue;
 import java.awt.Frame;
 
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -20,6 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 
 import br.com.Persistencia.Banco;
 import br.com.Bin.Desempenho;
@@ -32,7 +32,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 
 @SuppressWarnings("serial")
-public class JTesteQuestoes extends JFrame {
+public class JTesteQuestoes extends JDialog {
 
 	private JPanel contentPane;
 	private JButton btnFinalizar;
@@ -56,16 +56,16 @@ public class JTesteQuestoes extends JFrame {
 	private ArrayList<Integer> listaQuestaoResposta = new ArrayList<Integer>();
 	private ArrayList<Integer> listaOpcoesApresentadas = new ArrayList<Integer>();
 	private ArrayList<ArrayList<Integer>> listaHistorico = new ArrayList<ArrayList<Integer>>();
-	private JLabel lblAcert0;
-	private JLabel lblErr0;
-	private JLabel lblTotal0;
-	private JLabel lblQuest;
 
 	private float acertos = 0;
 	private float erros = 0;
 	private JButton btnSalvar;
 	private JButton btnCancelar;
 	private JButton btnLiberar;
+	private JLabel quest;
+	private JLabel total;
+	private JLabel erro;
+	private JLabel acerto;
 
 	/**
 	 * Launch the application.
@@ -87,28 +87,30 @@ public class JTesteQuestoes extends JFrame {
 	 * Create the frame.
 	 */
 	public JTesteQuestoes() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(0, 0, 1635, 760);
-		setExtendedState(Frame.MAXIMIZED_BOTH);
+		setType(Type.UTILITY);
+		setAlwaysOnTop(true);
+		setAlwaysOnTop(true);
+		setBounds(10, 0, 993, 702);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		setLocationRelativeTo(null);
 
 		JPanel panel = new JPanel();
 		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel.setBounds(200, 10, 950, 700);
+		panel.setBounds(10, 15, 950, 638);
 		contentPane.add(panel);
 		panel.setLayout(null);
 
 		JPanel painelEnunciado = new JPanel();
 		painelEnunciado.setBorder(new LineBorder(new Color(0, 0, 0)));
-		painelEnunciado.setBounds(10, 11, 930, 207);
+		painelEnunciado.setBounds(10, 11, 930, 133);
 		panel.add(painelEnunciado);
 		painelEnunciado.setLayout(null);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 910, 185);
+		scrollPane.setBounds(10, 11, 910, 104);
 		painelEnunciado.add(scrollPane);
 
 		txtEnunciado = new JTextArea();
@@ -117,7 +119,7 @@ public class JTesteQuestoes extends JFrame {
 
 		JPanel painelOpcoes = new JPanel();
 		painelOpcoes.setBorder(new LineBorder(new Color(0, 0, 0)));
-		painelOpcoes.setBounds(10, 229, 930, 428);
+		painelOpcoes.setBounds(10, 155, 930, 428);
 		panel.add(painelOpcoes);
 		painelOpcoes.setLayout(null);
 
@@ -200,11 +202,11 @@ public class JTesteQuestoes extends JFrame {
 			}
 
 		});
-		btnResponder.setBounds(730, 664, 100, 25);
+		btnResponder.setBounds(730, 594, 100, 25);
 		panel.add(btnResponder);
 
 		btnFinalizar = new JButton("Finalizar");
-		btnFinalizar.setBounds(840, 664, 100, 25);
+		btnFinalizar.setBounds(840, 594, 100, 25);
 		panel.add(btnFinalizar);
 		// System.out.println(getExtendedState());
 
@@ -216,6 +218,37 @@ public class JTesteQuestoes extends JFrame {
 		grupoBotoes.add(ltD);
 		grupoBotoes.add(ltE);
 
+		JLabel label = new JLabel("Acertos");
+		label.setBounds(510, 310, 70, 14);
+		painelOpcoes.add(label);
+
+		JLabel label_1 = new JLabel("Erros");
+		label_1.setBounds(510, 335, 70, 14);
+		painelOpcoes.add(label_1);
+
+		JLabel label_2 = new JLabel("Total");
+		label_2.setBounds(510, 360, 70, 14);
+		painelOpcoes.add(label_2);
+
+		JLabel label_3 = new JLabel("Questao");
+		label_3.setBounds(510, 388, 70, 14);
+		painelOpcoes.add(label_3);
+
+		quest = new JLabel("1");
+		quest.setBounds(597, 388, 58, 14);
+		painelOpcoes.add(quest);
+
+		total = new JLabel("0");
+		total.setBounds(597, 360, 46, 14);
+		painelOpcoes.add(total);
+		erro = new JLabel("0");
+		erro.setBounds(597, 335, 46, 14);
+		painelOpcoes.add(erro);
+
+		acerto = new JLabel("0");
+		acerto.setBounds(597, 310, 46, 14);
+		painelOpcoes.add(acerto);
+
 		btnSalvar = new JButton("Salvar");
 		btnSalvar.setEnabled(false);
 		btnSalvar.addActionListener(new ActionListener() {
@@ -226,34 +259,28 @@ public class JTesteQuestoes extends JFrame {
 				btnCancelar.setEnabled(false);
 				btnLiberar.setEnabled(true);
 
-				Opcao op = (Opcao) banco.buscarPorId(Opcao.class,
-						listaOpcoesApresentadas.get(0));
+				Opcao op = (Opcao) banco.buscarPorId(Opcao.class, listaOpcoesApresentadas.get(0));
 				op.setDescricao(txtrA.getText());
 				System.out.println(op.getDescricao());
 
-				Opcao op1 = (Opcao) banco.buscarPorId(Opcao.class,
-						listaOpcoesApresentadas.get(1));
+				Opcao op1 = (Opcao) banco.buscarPorId(Opcao.class, listaOpcoesApresentadas.get(1));
 				op1.setDescricao(txtrB.getText());
 				System.out.println(op1.getDescricao());
 
-				Opcao op2 = (Opcao) banco.buscarPorId(Opcao.class,
-						listaOpcoesApresentadas.get(2));
+				Opcao op2 = (Opcao) banco.buscarPorId(Opcao.class, listaOpcoesApresentadas.get(2));
 				op2.setDescricao(txtrC.getText());
 				System.out.println(op2.getDescricao());
 
-				Opcao op3 = (Opcao) banco.buscarPorId(Opcao.class,
-						listaOpcoesApresentadas.get(3));
+				Opcao op3 = (Opcao) banco.buscarPorId(Opcao.class, listaOpcoesApresentadas.get(3));
 				op3.setDescricao(txtrD.getText());
 				System.out.println(op3.getDescricao());
 
-				Opcao op4 = (Opcao) banco.buscarPorId(Opcao.class,
-						listaOpcoesApresentadas.get(4));
+				Opcao op4 = (Opcao) banco.buscarPorId(Opcao.class, listaOpcoesApresentadas.get(4));
 				op4.setDescricao(txtrE.getText());
 				System.out.println(txtrE.getText());
 				System.out.println(op4.getDescricao());
 
-				Questao q = (Questao) banco.buscarPorId(Questao.class,
-						op4.getIdQuestao());
+				Questao q = (Questao) banco.buscarPorId(Questao.class, op4.getIdQuestao());
 				System.out.println(q.getEnunciado());
 
 				q.setEnunciado(txtEnunciado.getText());
@@ -269,7 +296,7 @@ public class JTesteQuestoes extends JFrame {
 
 			}
 		});
-		btnSalvar.setBounds(208, 664, 100, 25);
+		btnSalvar.setBounds(208, 594, 100, 25);
 		panel.add(btnSalvar);
 
 		btnLiberar = new JButton("Liberar");
@@ -289,7 +316,7 @@ public class JTesteQuestoes extends JFrame {
 				txtrE.setEditable(true);
 			}
 		});
-		btnLiberar.setBounds(10, 665, 89, 23);
+		btnLiberar.setBounds(10, 595, 89, 23);
 		panel.add(btnLiberar);
 
 		btnCancelar = new JButton("Cancelar");
@@ -303,42 +330,11 @@ public class JTesteQuestoes extends JFrame {
 				insereQuestao();
 			}
 		});
-		btnCancelar.setBounds(109, 665, 89, 23);
+		btnCancelar.setBounds(109, 595, 89, 23);
 		panel.add(btnCancelar);
 
-		JLabel lblAcertos = new JLabel("Acertos");
-		lblAcertos.setBounds(10, 35, 70, 14);
-		contentPane.add(lblAcertos);
-
-		lblAcert0 = new JLabel("0");
-		lblAcert0.setBounds(97, 35, 46, 14);
-		contentPane.add(lblAcert0);
-
-		JLabel lblErros = new JLabel("Erros");
-		lblErros.setBounds(10, 60, 70, 14);
-		contentPane.add(lblErros);
-
-		lblErr0 = new JLabel("0");
-		lblErr0.setBounds(97, 60, 46, 14);
-		contentPane.add(lblErr0);
-
-		JLabel lblTotal = new JLabel("Total");
-		lblTotal.setBounds(10, 85, 70, 14);
-		contentPane.add(lblTotal);
-
-		lblTotal0 = new JLabel("0");
-		lblTotal0.setBounds(97, 85, 46, 14);
-		contentPane.add(lblTotal0);
-
-		JLabel label = new JLabel("Questao");
-		label.setBounds(1160, 11, 70, 14);
-		contentPane.add(label);
-
-		lblQuest = new JLabel("Quest");
-		lblQuest.setBounds(1247, 11, 70, 14);
-		contentPane.add(lblQuest);
-
-//		List<?> li = banco.listarObjetosAsc(Questao.class, "numeroOcorrencia");
+		// List<?> li = banco.listarObjetosAsc(Questao.class,
+		// "numeroOcorrencia");
 
 		// for (int i = 0; i < li.size(); i++) {
 		// Questao q = (Questao) li.get(i);
@@ -376,12 +372,9 @@ public class JTesteQuestoes extends JFrame {
 
 		txtEnunciado.setText(quest.getEnunciado());
 
-		lblQuest.setText(String.valueOf(quest.getId()));
-
 		listaQuestaoResposta.add(quest.getId());
 
-		ArrayList<Opcao> listOpcoes = (ArrayList<Opcao>) banco
-				.listarObjetosAsc(Opcao.class, "id");
+		ArrayList<Opcao> listOpcoes = (ArrayList<Opcao>) banco.listarObjetosAsc(Opcao.class, "id");
 
 		for (int i = 0; i < listOpcoes.size(); i++) {
 			Opcao op = listOpcoes.get(i);
@@ -394,109 +387,85 @@ public class JTesteQuestoes extends JFrame {
 		}
 
 		Collections.shuffle(listaOpcoesApresentadas);
-		Opcao op = ((Opcao) banco.buscarPorId(Opcao.class,
-				listaOpcoesApresentadas.get(0)));
+		Opcao op = ((Opcao) banco.buscarPorId(Opcao.class, listaOpcoesApresentadas.get(0)));
 
 		txtrA.setText(op.getDescricao());
-		op = ((Opcao) banco.buscarPorId(Opcao.class,
-				listaOpcoesApresentadas.get(1)));
+		op = ((Opcao) banco.buscarPorId(Opcao.class, listaOpcoesApresentadas.get(1)));
 
 		txtrB.setText(op.getDescricao());
-		op = ((Opcao) banco.buscarPorId(Opcao.class,
-				listaOpcoesApresentadas.get(2)));
+		op = ((Opcao) banco.buscarPorId(Opcao.class, listaOpcoesApresentadas.get(2)));
 
 		txtrC.setText(op.getDescricao());
-		op = ((Opcao) banco.buscarPorId(Opcao.class,
-				listaOpcoesApresentadas.get(3)));
+		op = ((Opcao) banco.buscarPorId(Opcao.class, listaOpcoesApresentadas.get(3)));
 
 		txtrD.setText(op.getDescricao());
 
-		op = ((Opcao) banco.buscarPorId(Opcao.class,
-				listaOpcoesApresentadas.get(4)));
+		op = ((Opcao) banco.buscarPorId(Opcao.class, listaOpcoesApresentadas.get(4)));
 
 		txtrE.setText(op.getDescricao());
 
-		System.out.println("questão - " + listaQuestaoResposta.get(0)
-				+ ", resposta certa - " + listaQuestaoResposta.get(1));
-		System.out.println("lista de questões -"
-				+ listaOpcoesApresentadas.get(0) + " "
-				+ listaOpcoesApresentadas.get(1) + " "
-				+ listaOpcoesApresentadas.get(2) + " "
-				+ listaOpcoesApresentadas.get(3) + " "
-				+ listaOpcoesApresentadas.get(4) + " ");
+		this.quest.setText(String.valueOf(quest.getId()));
 
-		// System.out.println("lista na posição 2 " +
-		// listaQuestaoResposta.get(2));
 	}
 
 	private void responder() {
 		if (ltA.isSelected()) {
-			if (listaOpcoesApresentadas.get(0).equals(
-					listaQuestaoResposta.get(1))) {
+			if (listaOpcoesApresentadas.get(0).equals(listaQuestaoResposta.get(1))) {
 				listaQuestaoResposta.add(1);
-				Questao q = (Questao) banco.buscarPorId(Questao.class,
-						listaQuestaoResposta.get(0));
+				Questao q = (Questao) banco.buscarPorId(Questao.class, listaQuestaoResposta.get(0));
 				q.setDificuldade((q.getDificuldade() * (float) 0.75));
 				q.setAcertos(q.getAcertos() + 1);
 				banco.salvarOuAtualizarObjeto(q);
 				acertos = acertos + 1;
-				lblAcert0.setText(String.valueOf(acertos));
+				acerto.setText(String.valueOf(acertos));
 				JOptionPane.showMessageDialog(null, "Resposta Correta!!");
 			}
 		}
 		if (ltB.isSelected()) {
-			if (listaOpcoesApresentadas.get(1).equals(
-					listaQuestaoResposta.get(1))) {
+			if (listaOpcoesApresentadas.get(1).equals(listaQuestaoResposta.get(1))) {
 				listaQuestaoResposta.add(1);
-				Questao q = (Questao) banco.buscarPorId(Questao.class,
-						listaQuestaoResposta.get(0));
+				Questao q = (Questao) banco.buscarPorId(Questao.class, listaQuestaoResposta.get(0));
 				q.setDificuldade((q.getDificuldade() * (float) 0.75));
 				q.setAcertos(q.getAcertos() + 1);
 				banco.salvarOuAtualizarObjeto(q);
 				acertos = acertos + 1;
-				lblAcert0.setText(String.valueOf(acertos));
+				acerto.setText(String.valueOf(acertos));
 				JOptionPane.showMessageDialog(null, "Resposta Correta!!");
 			}
 		}
 		if (ltC.isSelected()) {
-			if (listaOpcoesApresentadas.get(2).equals(
-					listaQuestaoResposta.get(1))) {
+			if (listaOpcoesApresentadas.get(2).equals(listaQuestaoResposta.get(1))) {
 				listaQuestaoResposta.add(1);
-				Questao q = (Questao) banco.buscarPorId(Questao.class,
-						listaQuestaoResposta.get(0));
+				Questao q = (Questao) banco.buscarPorId(Questao.class, listaQuestaoResposta.get(0));
 				q.setDificuldade((q.getDificuldade() * (float) 0.75));
 				q.setAcertos(q.getAcertos() + 1);
 				banco.salvarOuAtualizarObjeto(q);
 				acertos = acertos + 1;
-				lblAcert0.setText(String.valueOf(acertos));
+				acerto.setText(String.valueOf(acertos));
 				JOptionPane.showMessageDialog(null, "Resposta Correta!!");
 			}
 		}
 		if (ltD.isSelected()) {
-			if (listaOpcoesApresentadas.get(3).equals(
-					listaQuestaoResposta.get(1))) {
+			if (listaOpcoesApresentadas.get(3).equals(listaQuestaoResposta.get(1))) {
 				listaQuestaoResposta.add(1);
-				Questao q = (Questao) banco.buscarPorId(Questao.class,
-						listaQuestaoResposta.get(0));
+				Questao q = (Questao) banco.buscarPorId(Questao.class, listaQuestaoResposta.get(0));
 				q.setDificuldade((q.getDificuldade() * (float) 0.75));
 				q.setAcertos(q.getAcertos() + 1);
 				banco.salvarOuAtualizarObjeto(q);
 				acertos = acertos + 1;
-				lblAcert0.setText(String.valueOf(acertos));
+				acerto.setText(String.valueOf(acertos));
 				JOptionPane.showMessageDialog(null, "Resposta Correta!!");
 			}
 		}
 		if (ltE.isSelected()) {
-			if (listaOpcoesApresentadas.get(4).equals(
-					listaQuestaoResposta.get(1))) {
+			if (listaOpcoesApresentadas.get(4).equals(listaQuestaoResposta.get(1))) {
 				listaQuestaoResposta.add(1);
-				Questao q = (Questao) banco.buscarPorId(Questao.class,
-						listaQuestaoResposta.get(0));
+				Questao q = (Questao) banco.buscarPorId(Questao.class, listaQuestaoResposta.get(0));
 				q.setDificuldade((q.getDificuldade() * (float) 0.75));
 				q.setAcertos(q.getAcertos() + 1);
 				banco.salvarOuAtualizarObjeto(q);
 				acertos = acertos + 1;
-				lblAcert0.setText(String.valueOf(acertos));
+				acerto.setText(String.valueOf(acertos));
 
 				JOptionPane.showMessageDialog(null, "Resposta Correta!!");
 			}
@@ -507,9 +476,8 @@ public class JTesteQuestoes extends JFrame {
 			listaQuestaoResposta.add(0);
 			JOptionPane.showMessageDialog(null, "Sua Resposta esta errada! ");
 			erros = erros + 1;
-			lblErr0.setText(String.valueOf(erros));
-			Questao q = (Questao) banco.buscarPorId(Questao.class,
-					listaQuestaoResposta.get(0));
+			erro.setText(String.valueOf(erros));
+			Questao q = (Questao) banco.buscarPorId(Questao.class, listaQuestaoResposta.get(0));
 			q.setDificuldade((q.getDificuldade() * 2));
 			q.setAcertos(q.getAcertos() - 1);
 			banco.salvarOuAtualizarObjeto(q);
@@ -523,8 +491,7 @@ public class JTesteQuestoes extends JFrame {
 			// mp.setVisible(true);
 		}
 
-		Questao questao = (Questao) banco.buscarPorId(Questao.class,
-				listaQuestaoResposta.get(0));
+		Questao questao = (Questao) banco.buscarPorId(Questao.class, listaQuestaoResposta.get(0));
 
 		questao.setNumeroOcorrencia(questao.getNumeroOcorrencia() + 1);
 
@@ -535,7 +502,7 @@ public class JTesteQuestoes extends JFrame {
 
 		banco.salvarOuAtualizarObjeto(questao);
 
-		lblTotal0.setText(String.valueOf(acertos + erros));
+		total.setText(String.valueOf(acertos + erros));
 		insereQuestao();
 		if ((acertos + erros) >= 20) {
 			salvar();
@@ -552,12 +519,8 @@ public class JTesteQuestoes extends JFrame {
 		des.setNiveis(acertos / (acertos + erros));
 		des.setDate(new java.sql.Date(new java.util.Date().getTime()));
 
-		JOptionPane
-				.showMessageDialog(
-						null,
-						"Seu desemprenho doi de "
-								+ des.getNiveis()
-								+ " \n veja todos os resultados para verificar o grafico de desempenho");
+		JOptionPane.showMessageDialog(null, "Seu desemprenho doi de " + des.getNiveis()
+				+ " \n veja todos os resultados para verificar o grafico de desempenho");
 		banco.salvarObjeto(des);
 	}
 }

@@ -59,6 +59,9 @@ public class JAdicionaPalavras extends JDialog implements ActionListener {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		this.setAlwaysOnTop(true);
+		setType(Type.UTILITY);
+		setAlwaysOnTop(true);
+		setLocationRelativeTo(null);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 78, 686, 462);

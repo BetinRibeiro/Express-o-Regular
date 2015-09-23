@@ -56,6 +56,9 @@ public class JAdicionaLei extends JDialog {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		this.setAlwaysOnTop(true);
+		setType(Type.UTILITY);
+		setAlwaysOnTop(true);
+		setLocationRelativeTo(null);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 82, 596, 533);
